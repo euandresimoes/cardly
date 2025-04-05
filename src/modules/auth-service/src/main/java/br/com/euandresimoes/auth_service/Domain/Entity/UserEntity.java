@@ -1,16 +1,12 @@
 package br.com.euandresimoes.auth_service.Domain.Entity;
 
 import br.com.euandresimoes.auth_service.Domain.Enums.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
+@Table(name = "users_tb")
 public class UserEntity {
 
     @Id
@@ -20,6 +16,7 @@ public class UserEntity {
     @Column(unique = true)
     private String username;
     @NotNull
+    @Email
     @Column(unique = true)
     private String email;
     @NotNull
