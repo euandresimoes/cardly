@@ -1,6 +1,6 @@
-package br.com.euandresimoes.auth_service.Domain.Entity;
+package br.com.euandresimoes.auth_service.domain.entity;
 
-import br.com.euandresimoes.auth_service.Domain.Enums.UserRole;
+import br.com.euandresimoes.auth_service.domain.enums.UserRole;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -15,6 +15,7 @@ public class UserEntity {
     @NotNull
     @Column(unique = true)
     private String username;
+    private String displayName;
     @NotNull
     @Email
     @Column(unique = true)
@@ -29,14 +30,13 @@ public class UserEntity {
     public UserEntity() {
     }
 
-    public UserEntity(@NotNull String username, @NotNull String email, @NotNull String password,
-            @NotNull UserRole role) {
+    public UserEntity(String username, String displayName, String email, String password, UserRole role) {
         this.username = username;
+        this.displayName = displayName;
         this.email = email;
         this.password = password;
         this.role = role;
     }
-
 
     public Long getId() {
         return id;
@@ -78,4 +78,11 @@ public class UserEntity {
         this.role = role;
     }
 
+    public String getDisplayName() {
+        return displayName;
+    }
+
+    public void setDisplayName(String displayName) {
+        this.displayName = displayName;
+    }
 }

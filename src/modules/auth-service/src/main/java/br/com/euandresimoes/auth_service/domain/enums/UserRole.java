@@ -1,4 +1,4 @@
-package br.com.euandresimoes.auth_service.Domain.Enums;
+package br.com.euandresimoes.auth_service.domain.enums;
 
 public enum UserRole {
     PREMIUM("Premium"),

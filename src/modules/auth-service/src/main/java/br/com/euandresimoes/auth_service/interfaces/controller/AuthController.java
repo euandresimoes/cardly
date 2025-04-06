@@ -1,8 +1,8 @@
-package br.com.euandresimoes.auth_service.Presenter.Controller;
+package br.com.euandresimoes.auth_service.interfaces.controller;
 
-import br.com.euandresimoes.auth_service.Application.DTOs.Request.UserRegisterRequest;
-import br.com.euandresimoes.auth_service.Application.UseCases.UserRegisterUseCase;
-import br.com.euandresimoes.auth_service.Domain.Repository.UserRepository;
+import br.com.euandresimoes.auth_service.application.dtos.request.UserRegisterRequest;
+import br.com.euandresimoes.auth_service.application.useCases.UserRegisterUseCase;
+import br.com.euandresimoes.auth_service.domain.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
