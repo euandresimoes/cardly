@@ -5,6 +5,6 @@ services:
       - MYSQL_USER=docker
       - MYSQL_PASSWORD=docker
       - MYSQL_ROOT_PASSWORD=docker
-      - MYSQL_DATABASE=api_users_db
+      - MYSQL_DATABASE=users_db
     ports:
       - '3306:3306'
