@@ -1,11 +1,10 @@
 package br.com.euandresimoes.auth_service.application.useCases;
 
 import br.com.euandresimoes.auth_service.application.exceptions.EmailAlreadyInUseException;
-import br.com.euandresimoes.auth_service.application.exceptions.UsernameAlreadyInUseException;
 import br.com.euandresimoes.auth_service.domain.entity.UserEntity;
 import br.com.euandresimoes.auth_service.domain.enums.UserRole;
 import br.com.euandresimoes.auth_service.shared.utils.DataGenerator;
-import br.com.euandresimoes.auth_service.shared.utils.PasswordHasher;
+import br.com.euandresimoes.auth_service.infrastructure.services.PasswordHashService;
 import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +15,11 @@ import br.com.euandresimoes.auth_service.domain.repository.UserRepository;
 public class UserRegisterUseCase {
 
     private final UserRepository userRepo;
-    private final PasswordHasher passwordHasher;
+    private final PasswordHashService passwordHash;
 
-    public UserRegisterUseCase(UserRepository userRepo, PasswordHasher passwordHasher) {
+    public UserRegisterUseCase(UserRepository userRepo, PasswordHashService passwordHash) {
         this.userRepo = userRepo;
-        this.passwordHasher = passwordHasher;
+        this.passwordHash = passwordHash;
     }
 
     public void execute(@Valid UserRegisterRequest data) {
@@ -28,7 +27,7 @@ public class UserRegisterUseCase {
                 DataGenerator.genUsername(),
                 data.displayName(),
                 data.email(),
-                passwordHasher.encode(data.password()),
+                passwordHash.encode(data.password()),
                 UserRole.USER
         );
 
