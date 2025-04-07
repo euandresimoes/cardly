@@ -1,0 +1,1 @@
+ALTER TABLE users_tb MODIFY password VARCHAR(255);
