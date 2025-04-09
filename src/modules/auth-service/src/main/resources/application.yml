@@ -8,10 +8,13 @@ spring:
     hibernate:
       ddl-auto: none
   datasource:
-    url: jdbc:mysql://localhost:3306/users_db
-    username: docker
-    password: docker
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:h2:mem:application_db
+    username: dev
+    password: dev
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
   flyway:
     enabled: true
     locations:
