@@ -14,7 +14,7 @@ import java.time.ZoneOffset;
 @Service
 public class JwtService implements IJwtService {
 
-    @Value("${JWT.SECRET}")
+    @Value("${jwt.secret}")
     private String secret;
 
 //    Tests
