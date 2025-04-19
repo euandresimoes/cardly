@@ -1,0 +1,40 @@
+@if (message_box_message) {
+<app-message-box [duration]="message_box_duration" [message]="message_box_message"
+    [type]="message_box_type"></app-message-box>
+}
+
+
+<div class="w-screen h-screen flex justify-center items-center">
+    <form (ngSubmit)="handleSubmit()" class="flex flex-col justify-center items-center">
+        <div>
+            <p>
+                Display Name
+            </p>
+            <input type="text" name="displayName" required minlength="4" maxlength="25" [(ngModel)]="user.displayName"
+                #displayName="ngModel">
+        </div>
+
+        <div>
+            <p>
+                Email
+            </p>
+            <input type="email" name="email" required minlength="5" maxlength="50" [(ngModel)]="user.email"
+                #email="ngModel">
+        </div>
+
+        <div>
+            <p>
+                Password
+            </p>
+            <input type="password" name="password" required minlength="8" [(ngModel)]="user.password"
+                #password="ngModel">
+        </div>
+
+        <div>
+            <button type="submit">
+                Sign up
+            </button>
+        </div>
+    </form>
+
+</div>
