@@ -1,0 +1,2 @@
+ALTER TABLE pins_tb
+ALTER COLUMN pin_clicks DROP NOT NULL;
