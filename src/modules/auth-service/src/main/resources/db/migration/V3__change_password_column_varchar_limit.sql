@@ -1,1 +1,0 @@
-ALTER TABLE users_tb MODIFY COLUMN password VARCHAR(255);
