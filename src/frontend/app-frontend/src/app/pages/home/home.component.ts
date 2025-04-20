@@ -8,5 +8,9 @@ import { Component } from '@angular/core';
   styleUrl: './home.component.css'
 })
 export class HomeComponent {
-
+  userData = {
+    id: 0,
+    email: "",
+    displayName: "",
+  }
 }

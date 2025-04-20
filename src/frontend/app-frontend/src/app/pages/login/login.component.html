@@ -1,1 +1,30 @@
-<p>login works!</p>
+@if (messageBox.visible) {
+<app-message-box [type]="messageBox.type" [message]="messageBox.message" [duration]="messageBox.duration"
+    (closed)="messageBox.visible = false" />
+}
+
+<div class="w-screen h-screen flex justify-center items-center">
+    <form (ngSubmit)="handleSubmit()" class="flex flex-col justify-center items-center">
+        <div>
+            <p>Email</p>
+            <input type="email" name="email" required maxlength="50" minlength="5" [(ngModel)]="user.email">
+        </div>
+        <div>
+            <p>Password</p>
+            <input type="password" name="password" required minlength="8" [(ngModel)]="user.password">
+        </div>
+        <div>
+            <button type="submit">
+                Sign in
+            </button>
+        </div>
+        <div>
+            <p>
+                Already have an account?
+                <a [routerLink]="['/register']">
+                    Sign up
+                </a>
+            </p>
+        </div>
+    </form>
+</div>

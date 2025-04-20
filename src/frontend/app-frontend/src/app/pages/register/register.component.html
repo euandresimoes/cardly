@@ -1,6 +1,6 @@
-@if (message_box_message) {
-<app-message-box [duration]="message_box_duration" [message]="message_box_message"
-    [type]="message_box_type"></app-message-box>
+@if (messageBox.visible) {
+<app-message-box [duration]="messageBox.duration" [message]="messageBox.message" [type]="messageBox.type"
+    (closed)="messageBox.visible = false" />
 }
 
 
@@ -10,30 +10,36 @@
             <p>
                 Display Name
             </p>
-            <input type="text" name="displayName" required minlength="4" maxlength="25" [(ngModel)]="user.displayName"
-                #displayName="ngModel">
+            <input type="text" name="displayName" required minlength="4" maxlength="25" [(ngModel)]="user.displayName">
         </div>
 
         <div>
             <p>
                 Email
             </p>
-            <input type="email" name="email" required minlength="5" maxlength="50" [(ngModel)]="user.email"
-                #email="ngModel">
+            <input type="email" name="email" required minlength="5" maxlength="50" [(ngModel)]="user.email">
         </div>
 
         <div>
             <p>
                 Password
             </p>
-            <input type="password" name="password" required minlength="8" [(ngModel)]="user.password"
-                #password="ngModel">
+            <input type="password" name="password" required minlength="8" [(ngModel)]="user.password">
         </div>
 
         <div>
             <button type="submit">
                 Sign up
             </button>
+        </div>
+
+        <div>
+            <p>
+                Already have an account?
+                <a [routerLink]="['/login']">
+                    Sign in
+                </a>
+            </p>
         </div>
     </form>
 
