@@ -9,12 +9,10 @@
         <module name="api-gateway" />
         <module name="pin-service" />
         <module name="auth-service" />
+        <module name="user-service" />
         <module name="eureka-server" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="user-service" target="21" />
-    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">

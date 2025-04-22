@@ -34,6 +34,13 @@ spring:
           filters:
               - StripPrefix=1
               - AuthenticationFilter
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+              - Path=/user/**
+          filters:
+              - StripPrefix=1
+              - AuthenticationFilter
 
 jwt:
   secret: secret12345
