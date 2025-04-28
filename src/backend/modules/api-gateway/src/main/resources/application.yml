@@ -41,6 +41,3 @@ spring:
           filters:
               - StripPrefix=1
               - AuthenticationFilter
-
-jwt:
-  secret: secret12345
