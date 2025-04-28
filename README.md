@@ -42,3 +42,7 @@ O **Cardly** é mais do que uma plataforma de links.
 É o seu cartão de visitas para o mundo digital.
 
 > **Seu produto merece brilhar. Deixe o Cardly te ajudar.**
+
+## 📄 Licença
+
+Este projeto está sob a licença [MIT](LICENSE).
