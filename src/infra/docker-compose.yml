@@ -1,10 +1,105 @@
 services:
-  mysql:
-    image: mysql:latest
-    environment:
-      - MYSQL_USER=docker
-      - MYSQL_PASSWORD=docker
-      - MYSQL_ROOT_PASSWORD=docker
-      - MYSQL_DATABASE=users_db
+
+  eureka-server:
+    build:
+      context: ../backend/modules/eureka-server
+      dockerfile: Dockerfile
     ports:
-      - '3306:3306'
+      - "8761:8761"
+
+  auth-service:
+    build:
+      context: ../backend/modules/auth-service
+      dockerfile: Dockerfile
+    environment:
+      - AUTH_DB_URL=jdbc:mysql://auth-db:3306/auth_db
+      - JWT_SECRET=MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmfrT6vaF5rNKX6qEqD1YG90VXtCcIl0/VjOqsgFAELDeXaYnxIivhj1Ta0oOqT+xUX0TyHUz0StET/G0lJoSzHdC0l8GkHmbhIgeSlr2tejmG4uFTmqhmKugjP7eflblseyzhEgcJihPgLwiPH1Q06OX1gy+gMpynGZscbAZPK57ZlW7JWznmb0oQR42NmQ76vHtTQXymHG4mB5DHRs39MWalSo9WhYGsUoRCtGKLDU08D7TPPAgYQc8uZikPPsvG8ZMCpyeVI7GPUg5pL8TSblTG6Acf+PVy17ForDd05dCEOeZRCVXHh2+fvZTyMavI3itIZ6svT+NNBN6xNbfPAgMBAAECggEAD3Kg1sWSyTf7GilPkW121+fywR5v+LYWrC5fn726rt3DaAMHeh4SNY1s8W39gBHbpZW+pJA0vFMsxE6ezzGcYloZK922E8TWWtEjeWW5wkdy4ExbXRHJH3b1BEA8iKFbC5uqIFU3M0Vibrcuc3O+sQy4OWgAmpEs7mbLzilKXzyl2na0E9dfGdkdfD8vkpHo6q5/wbCRMFSQ5xq8rLqObCYyJTTjJTCWKErwbRmfIaFngeR8tXKjI6j0pZszxzmHQgP3b+zl660wa6nzKgTMY3UJN1DeL1IahMdsMJEiEXqoNGkjO04mCbZqsrMI0o3/b1qQwNCdqcVwYcSH38/ooQKBgQDXLoM2Hwu3rx2CVSeTTv1AprgCPrasVg/im2dC+1iv0R0KnSkzS/9YAqtqI/7smbLK237wkR/xDllUUcZSIinGmkhjt9nY5Z306ZfIoaqATn3eEgTfVKfQlvmiK5v0XERDIjXGMg0I7kvf79yEGJO5bW+JVbQWnwXy5OQpFFLg6QKBgQDGE+gKsk4JndbnBknVSlzJ8/C5LXPC/8mUyhnfLbhghWtMiSrcBhnLi3ZnRlZqcE56CvYJEN1ylMCHDB7I7kMWCK72JvI42nJIRfmkK5wDTgTBhMbbVNyWjLFOz5ovZTlErBW15YCNS+VLNmNROaf3k625EsfaS0gUiNDKFl6f9wKBgQCkaGRWQKg6QvDf+OIQ+iQjdn5XMMVvrR3b/PKLyfD7/GEdD/E/wUwqWXfQ1Andip2Bwu0dLzThgB4ef5Bwhqu2k4DFt94Zi28BhkyzPVpBSDeBKfFRFaRWilPXZUx2Ct0ZEhVWBj3RWgjc465vuzt7TLMQkkvTkNMBv4LYJDAiqQKBgBsC0ezLfdrP3GNqtxzP5DFiA5ys9xFLYkjY+og1quP2rbglKGQSrOfV39Kbg+NF5127Kuv3kcszP8HqxDPwUdOqYXmNvBBGsbjrWeyqSb8ln35oRdnZC6+4BeHSa5s0+YdE1D0Wy9340I7eHtMPwrj/OXx4dCpvg6fRNG+qd0LnAoGBANEk60ZAFZTtB96gVTdyAHsLhn+Ur93nmNsgJQtCh7pUi7D7WrKzxCmYMicyxHaxh3w+HL4P396lQSqLgnVF9wkJ0gRPB6o7k/EeSJT2ixMcc8jMim62F+/hR8qjX8cbGmB/A/PNktVMtcXcLi7N6GarJ1eEWbt+GraZA1/uco1G
+    ports:
+      - "8081:8081"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      auth-db:
+        condition: service_healthy
+
+  auth-db:
+    container_name: auth-db
+    image: mysql:8
+    environment:
+      - MYSQL_DATABASE=auth_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3306:3306"
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 20s
+
+  pin-service:
+    build:
+      context: ../backend/modules/pin-service
+      dockerfile: Dockerfile
+    environment:
+      - PIN_DB_URL=jdbc:mysql://pin-db:3306/pin_db
+    ports:
+      - "8082:8082"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      pin-db:
+          condition: service_healthy
+
+  pin-db:
+    container_name: pin-db
+    image: mysql:8
+    environment:
+      - MYSQL_DATABASE=pin_db
+      - MYSQL_ROOT_PASSWORD=root
+    ports:
+      - "3307:3306"
+    tmpfs:
+      - /var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      retries: 5
+      start_period: 30s
+      timeout: 20s
+
+  user-service:
+    build:
+      context: ../backend/modules/user-service
+      dockerfile: Dockerfile
+    environment:
+      - USER_AUTH_DB_URL=jdbc:mysql://auth-db:3306/auth_db
+    ports:
+      - "8083:8083"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      auth-db:
+        condition: service_healthy
+
+  api-gateway:
+    build:
+      context: ../backend/modules/api-gateway
+      dockerfile: Dockerfile
+    environment:
+      - JWT_SECRET=MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCmfrT6vaF5rNKX6qEqD1YG90VXtCcIl0/VjOqsgFAELDeXaYnxIivhj1Ta0oOqT+xUX0TyHUz0StET/G0lJoSzHdC0l8GkHmbhIgeSlr2tejmG4uFTmqhmKugjP7eflblseyzhEgcJihPgLwiPH1Q06OX1gy+gMpynGZscbAZPK57ZlW7JWznmb0oQR42NmQ76vHtTQXymHG4mB5DHRs39MWalSo9WhYGsUoRCtGKLDU08D7TPPAgYQc8uZikPPsvG8ZMCpyeVI7GPUg5pL8TSblTG6Acf+PVy17ForDd05dCEOeZRCVXHh2+fvZTyMavI3itIZ6svT+NNBN6xNbfPAgMBAAECggEAD3Kg1sWSyTf7GilPkW121+fywR5v+LYWrC5fn726rt3DaAMHeh4SNY1s8W39gBHbpZW+pJA0vFMsxE6ezzGcYloZK922E8TWWtEjeWW5wkdy4ExbXRHJH3b1BEA8iKFbC5uqIFU3M0Vibrcuc3O+sQy4OWgAmpEs7mbLzilKXzyl2na0E9dfGdkdfD8vkpHo6q5/wbCRMFSQ5xq8rLqObCYyJTTjJTCWKErwbRmfIaFngeR8tXKjI6j0pZszxzmHQgP3b+zl660wa6nzKgTMY3UJN1DeL1IahMdsMJEiEXqoNGkjO04mCbZqsrMI0o3/b1qQwNCdqcVwYcSH38/ooQKBgQDXLoM2Hwu3rx2CVSeTTv1AprgCPrasVg/im2dC+1iv0R0KnSkzS/9YAqtqI/7smbLK237wkR/xDllUUcZSIinGmkhjt9nY5Z306ZfIoaqATn3eEgTfVKfQlvmiK5v0XERDIjXGMg0I7kvf79yEGJO5bW+JVbQWnwXy5OQpFFLg6QKBgQDGE+gKsk4JndbnBknVSlzJ8/C5LXPC/8mUyhnfLbhghWtMiSrcBhnLi3ZnRlZqcE56CvYJEN1ylMCHDB7I7kMWCK72JvI42nJIRfmkK5wDTgTBhMbbVNyWjLFOz5ovZTlErBW15YCNS+VLNmNROaf3k625EsfaS0gUiNDKFl6f9wKBgQCkaGRWQKg6QvDf+OIQ+iQjdn5XMMVvrR3b/PKLyfD7/GEdD/E/wUwqWXfQ1Andip2Bwu0dLzThgB4ef5Bwhqu2k4DFt94Zi28BhkyzPVpBSDeBKfFRFaRWilPXZUx2Ct0ZEhVWBj3RWgjc465vuzt7TLMQkkvTkNMBv4LYJDAiqQKBgBsC0ezLfdrP3GNqtxzP5DFiA5ys9xFLYkjY+og1quP2rbglKGQSrOfV39Kbg+NF5127Kuv3kcszP8HqxDPwUdOqYXmNvBBGsbjrWeyqSb8ln35oRdnZC6+4BeHSa5s0+YdE1D0Wy9340I7eHtMPwrj/OXx4dCpvg6fRNG+qd0LnAoGBANEk60ZAFZTtB96gVTdyAHsLhn+Ur93nmNsgJQtCh7pUi7D7WrKzxCmYMicyxHaxh3w+HL4P396lQSqLgnVF9wkJ0gRPB6o7k/EeSJT2ixMcc8jMim62F+/hR8qjX8cbGmB/A/PNktVMtcXcLi7N6GarJ1eEWbt+GraZA1/uco1G
+    ports:
+      - "8080:8080"
+    depends_on:
+      eureka-server:
+        condition: service_started
+      auth-service:
+        condition: service_started
+      pin-service:
+        condition: service_started
+      user-service:
+        condition: service_started

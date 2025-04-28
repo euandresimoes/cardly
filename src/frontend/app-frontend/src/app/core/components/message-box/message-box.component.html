@@ -1,0 +1,28 @@
+@if (isVisible) {
+@if (type === MessageType.SUCCESS) {
+<div @fadeSlide (@fadeSlide.done)="onAnimationDone($event)"
+    class="max-w-[20rem] hover:scale-[1.05] transition-all ease-in-out duration-300 flex items-stretch bg-green-500/25 p-3 gap-3 absolute left-1/2 -translate-x-1/2 z-[9999] border-2 border-green-400/30 top-14 rounded-[5px] h-auto">
+
+    <div class="border-2 border-green-400/50 rounded-full"></div>
+    <p class="text-black break-words font-[450] place-self-center">{{message}}</p>
+</div>
+}
+
+@if (type === MessageType.ERROR) {
+<div @fadeSlide (@fadeSlide.done)="onAnimationDone($event)"
+    class="max-w-[20rem] hover:scale-[1.05] transition-all ease-in-out duration-300 flex items-stretch bg-red-500/25 p-3 gap-3 absolute left-1/2 -translate-x-1/2 z-[9999] border-2 border-red-400/30 top-14 rounded-[5px] h-auto">
+
+    <div class="border-2 border-red-400/50 rounded-full"></div>
+    <p class="text-black break-words font-[450] place-self-center">{{message}}</p>
+</div>
+}
+
+@if (type === MessageType.WARNING) {
+<div @fadeSlide (@fadeSlide.done)="onAnimationDone($event)"
+    class="max-w-[20rem] hover:scale-[1.05] transition-all ease-in-out duration-300 flex items-stretch bg-yellow-500/25 p-3 gap-3 absolute left-1/2 -translate-x-1/2 z-[9999] border-2 border-yellow-400/30 top-14 rounded-[5px] h-auto">
+
+    <div class="border-2 border-yellow-400/50 rounded-full"></div>
+    <p class="text-black break-words font-[450] place-self-center">{{message}}</p>
+</div>
+}
+}

@@ -1,0 +1,27 @@
+spring:
+  #  MySQL Database
+  datasource:
+    url: jdbc:mysql://localhost:3306/auth_db
+    username: root
+    password: root
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+  #    H2 Database
+  #  datasource:
+  #    url: jdbc:h2:mem:dev_db;MODE=MySQL
+  #    username: dev
+  #    password: dev
+  #  h2:
+  #    console:
+  #      enabled: true
+  #      path: /h2-console
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
